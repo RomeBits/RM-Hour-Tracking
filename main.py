@@ -9,7 +9,7 @@ from datetime import datetime
 class Person:
     def __init__(self, rcsid):
         self.rcsid = rcsid
-        self.total_hours = 0
+        self.total_hours = datetime.strptime('00:00:00', "%H:%M:%S")
         self.total_sign_ins = 0
     
     def average_duration(self):
@@ -46,17 +46,14 @@ if __name__ == "__main__":
         if rcsid in half_found:
 
             if data['In_Out'][i] == "Out":
-                # a = int(a.strftime
-                final   = int(datetime.strftime(datetime.strptime(data['Timestamp'][i], '%m/%d/%Y %H:%M:%S')))
+                final   = datetime.strptime(data['Timestamp'][i], '%m/%d/%Y %H:%M:%S')
                 init    = datetime.strptime(people_in_times[rcsid], '%m/%d/%Y %H:%M:%S')
-                delta   = final - init
 
-                print(delta)
-                people_objects[rcsid].total_hours += int(delta)
+                delta   = final - init
+                people_objects[rcsid].total_hours += delta
 
             else:
                 print("{} did not have an \"out\" time marked before signing in again at {}", rcsid, data['Timestamp'][i])
-
 
         # Case where this person has not checked in yet
         else:
@@ -78,7 +75,7 @@ if __name__ == "__main__":
                 print("{} did not have an \"in\" time marked before signing out at {}", rcsid, data['Timestamp'][i])
 
 
-    print(people_objects["romeb"].total_hours)
+    # print(people_objects["romeb"].total_hours)
 
 
 
