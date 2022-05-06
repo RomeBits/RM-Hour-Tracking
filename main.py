@@ -1,9 +1,9 @@
-# Written by Benjamin Rome 6-6-22
+# Written by Benjamin Rome 5-6-22
 # See README for more info on how to use
 import sys
-from numpy import half
 import pandas as pd
 import matplotlib.pyplot as plt
+from datetime import datetime
 
 
 class Person:
@@ -35,18 +35,27 @@ if __name__ == "__main__":
 
     for i in range(len(data['Timestamp'])):
         if i == 0: continue
-        print(data['Timestamp'][i])
-        print(data['RCSID'][i])
-        print(data['Subsystem'][i])
-        print(data['In_Out'][i])
+        # print(data['Timestamp'][i])
+        # print(data['RCSID'][i])
+        # print(data['Subsystem'][i])
+        # print(data['In_Out'][i])
 
         rcsid = data['RCSID'][i]
 
         # Case where we have an in time but no out time yet
         if rcsid in half_found:
-            print(data['Timestamp'][i])
-            print(people_in_times[rcsid])
 
+            if data['In_Out'][i] == "Out":
+                # a = int(a.strftime
+                final   = int(datetime.strftime(datetime.strptime(data['Timestamp'][i], '%m/%d/%Y %H:%M:%S')))
+                init    = datetime.strptime(people_in_times[rcsid], '%m/%d/%Y %H:%M:%S')
+                delta   = final - init
+
+                print(delta)
+                people_objects[rcsid].total_hours += int(delta)
+
+            else:
+                print("{} did not have an \"out\" time marked before signing in again at {}", rcsid, data['Timestamp'][i])
 
 
         # Case where this person has not checked in yet
@@ -67,6 +76,9 @@ if __name__ == "__main__":
             #  (Missed sign in or marked incorrectly)
             else:
                 print("{} did not have an \"in\" time marked before signing out at {}", rcsid, data['Timestamp'][i])
+
+
+    print(people_objects["romeb"].total_hours)
 
 
 
